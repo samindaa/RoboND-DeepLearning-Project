@@ -1,6 +1,5 @@
 # Project 4: Follow Me
 ### Saminda Abeyruwan
--
 
 In this project, we have developed an encoder-decoder deep segmentation network from images streamed from a simulated drone. 
 
