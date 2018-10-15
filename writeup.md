@@ -188,7 +188,7 @@ We have used the following hyper-parameters:
 	
 The training-validation graphs:
 
-![image2](train_val.png)	
+![image2](./misc/train_val.png)	
 	
 We have trained the model on a AWS instance following the project instructions. 
 
@@ -198,15 +198,15 @@ The following sample predictions are obtained from the notebook.
 
 - __following\_images__: tests how well the network can identify the target while following them.
 
-![image3](following_images.png)
+![image3](./misc/following_images.png)
 
 - __patrol\_non\_targ__: tests how often the network makes a mistake and identifies the wrong person as the target.
 
-![image4](patrol_non_targ.png)
+![image4](./misc/patrol_non_targ.png)
 
 - __patrol\_with\_targ__: test how well the network can detect the hero from a distance.
 
-![image4](patrol_with_targ.png)
+![image4](./misc/patrol_with_targ.png)
 
 We have used IoU to calculate the final score. The IoU is the _intersection_ over _union_. Our model has achieved a final score: __0.449953032283__.
 
