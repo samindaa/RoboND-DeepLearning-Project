@@ -15,13 +15,33 @@ As a starting point, we have used the training, validating, and evaluating datas
 | /data/sample\_evaluation\_data/patrol\_non\_targ | 270|
 | /data/sample\_evaluation\_data/patrol\_with\_targ | 322|
 
+
 ## Encoder-Decoder Segmentation Network
 
-![image1](./fcn.png)
+Image segmentation is the process of partitioning a digital image into multiple segments. In this process, each pixel is assigned with labels that share common characteristics. In this discussion, we are focusing on segmentation via _fully convolution networks_.
 
-The Encoder-Decoder architecture consists of an _encoder_, similar to a convolution neural network, designed to understand the spacial information available in the given image for a specific task. When we have designed the convolutional blocks (as shown in the figure), we have used _depthwise separable convolutions_ technique, which, comprise of a convolution performed over each channel of an input layer and followed by a 1x1 convolution that takes the output channels from the previous step and then combines them into an output layer. This method reduces the number of parameters needed to represent spacial information, while improving runtime performance, and added benefit of reducing overfitting to an extent. We have developed the encoder block using _SeparableConv2DKeras_ and the instructions available in the notebook. 
+A convolutional neural network (CNN) is a category of neural networks that provides constructs to capture spacial information of inputs, e.g., images, for classification and other tasks. It consists of convolution, pooling, and normalizing layers, which captures lines, shapes, and regions of interest for the task at hand. 
 
-A _decoder_ is used to achieve upsampling such that input and output have similar shapes. The encoder and decoder is symmetric and connected by a 1x1 convolution block. Our decoder has used _bilinear upsampling_, which utilizes the weighted average of four nearest known pixels, located diagonally to a given pixel, to estimate a new pixel intensity value. We have developed the blocks using _BilinearUpSampling2D_. 
+![image1](https://cdn-images-1.medium.com/max/1600/1*NQQiyYqJJj4PSYAeWvxutg.png)
+
+
+A fully convolution neural network (FCN) is a CNN, where the last fully connected layers are substituted by another CNN using 1x1 convolution. A _1x1 convolution_ simply maps an input pixel with all its channels to an output pixel. It is also an efficient way to increase or decrease depth of a volume. 
+
+![image2](./misc/fcn.png)
+
+After 1x1 convolution, an upsampling is performed to match the input and output shapes. A FCN captures the global context of the scene and enables to label objects and their approximate locations in the images. One downside is though, due to downsampling in the CNN part, this approach loses _some_ resolution. To solve this problem, a method, _skiping_, has been proposed to get activations from previous layers, and then sum or concatenate or interpolate.
+
+In order to obtain better segmentation, an encoder-decoder network has been proposed. 
+
+![image3](./misc/enc_dec_fcn.png)
+
+The _convolution network_ or encoder, extract features of an image, while _deconvolution network_ or decoder, reverses the convolution network until the output has the same shape as the input. The 1x1 convolution preserves the localization information and scaling up to original image size in the output activates pixels to indicate objects and their approximate locations in the image. Similar to FCN, this architecture also loses some information, where skipping connections are used to solve this problem.  
+
+When we have designed the convolutional blocks (as shown in the figure), we have used _depthwise separable convolutions_ technique, which, comprise of a convolution performed over each channel of an input layer and followed by a 1x1 convolution that takes the output channels from the previous step and then combines them into an output layer. This method reduces the number of parameters needed to represent spacial information, while improving runtime performance, and added benefit of reducing overfitting to an extent. We have developed the encoder block using _SeparableConv2DKeras_ and the instructions available in the notebook. 
+
+Our decoder has used _bilinear upsampling_, which utilizes the weighted average of four nearest known pixels, located diagonally to a given pixel, to estimate a new pixel intensity value. We have developed the blocks using _BilinearUpSampling2D_. 
+
+We have also used _batch normalization_ in between layers. During the training phase, this method, normalizes inputs to each layer using  mean and variance of the values in the current mini-batch. It has been shown that with batch normalization: the networks train faster, we can use higher learning rates, and to some extent provides some regularization.
 
 
 The complete details of the deep network is as follows:
@@ -202,6 +222,12 @@ We have trained the network using the images and mask related to _Hero_ and othe
 - Recoding an enhanced dataset from the simulator to capture the scenarios where the model needs more data. 
 - Experiment with layers to obtain better performance.
 - Experiment with other segmentation architectures. 
+
+### References
+
+- [Image Semantic Segmentation](https://wiki.tum.de/display/lfdv/Image+Semantic+Segmentation)
+- [Image Segmentation](https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/image_segmentation.html)
+- [Fully Convolution Networks](http://tutorial.caffe.berkeleyvision.org/caffe-cvpr15-pixels.pdf)
 
 
 
